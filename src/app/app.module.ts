@@ -9,6 +9,12 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
+import { ButtonsModule } from '@progress/kendo-angular-buttons';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+
+
+
 
 @NgModule({
   declarations: [
@@ -21,7 +27,10 @@ import { SharedModule } from './shared/shared.module';
     CoreModule,
     SharedModule,
     DashboardModule,
-    BacklogModule
+    BacklogModule,
+    ButtonsModule,
+    BrowserAnimationsModule,
+    DropDownsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

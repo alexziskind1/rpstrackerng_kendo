@@ -8,7 +8,7 @@ import { Store } from '../state/app-store';
 @Injectable()
 export class PtUserService {
 
-    private getUsersUrl(nameFilter: string): string {
+    private getUsersUrl(nameFilter?: string): string {
         let url = `${env.apiEndpoint}/users`;
         if (nameFilter) {
             url = url + '?name=' + nameFilter;
@@ -21,7 +21,7 @@ export class PtUserService {
         private store: Store
     ) { }
 
-    public fetchUsers(nameFilter: string) {
+    public fetchUsers(nameFilter?: string) {
         this.http.get<PtUser[]>(this.getUsersUrl(nameFilter))
             .subscribe((data: PtUser[]) => {
                 data.forEach(u => {

@@ -3,7 +3,9 @@ import { DashboardService } from '../../services/dashboard.service';
 import { DashboardFilter } from '../../repositories/dashboard.repository';
 import { Store } from 'src/app/core/state/app-store';
 import { StatusCounts } from '../../models';
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription, Observable } from 'rxjs';
+import { PtUserService } from 'src/app/core/services';
+import { PtUser } from 'src/app/core/models/domain';
 
 
 interface DateRange {
@@ -30,6 +32,8 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
         openItemsCount: 0
     });
 
+    public users$: Observable<PtUser[]> = this.store.select<PtUser[]>('users');
+
     private get currentUserId() {
         if (this.store.value.currentUser) {
             return this.store.value.currentUser.id;
@@ -40,10 +44,24 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
 
     constructor(
         private dashboardService: DashboardService,
+        private userService: PtUserService,
         private store: Store
     ) { }
 
     public ngOnInit() {
+        this.refresh();
+    }
+
+    public userFilterOpen() {
+        this.userService.fetchUsers();
+    }
+
+    public userFilterValueChange(user: PtUser | undefined) {
+        if (user) {
+            this.filter.userId = user.id;
+        } else {
+            this.filter.userId = undefined;
+        }
         this.refresh();
     }
 

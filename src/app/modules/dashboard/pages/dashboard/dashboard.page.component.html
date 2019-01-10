@@ -15,7 +15,16 @@
             <div class="btn-group mr-2">
 
                 <kendo-combobox [data]="users$ | async" textField="fullName" valueField="id" (open)="userFilterOpen()"
-                    (valueChange)="userFilterValueChange($event)">
+                    (valueChange)="userFilterValueChange($event)" placeholder="User" style="width: 250px;">
+
+                    <ng-template kendoComboBoxItemTemplate let-userItem>
+
+                        <div class="row" style="margin-left:10px;">
+                            <img class="li-avatar rounded mx-auto d-block" [src]="userItem.avatar" />
+                            <span style="margin-left:10px;">{{ userItem.fullName }}</span>
+                        </div>
+                    </ng-template>
+
                 </kendo-combobox>
 
                 <kendo-buttongroup selection="single" look="flat">

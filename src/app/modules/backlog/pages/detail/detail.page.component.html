@@ -1,21 +1,26 @@
 <div *ngIf="item">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
         <h1 class="h2">{{ item.title }}</h1>
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <app-detail-section-selector [selectedScreen]="selectedDetailsScreen" (screenSelected)="onScreenSelected($event)"></app-detail-section-selector>
-        </div>
+
     </div>
 
 
-    <div [ngSwitch]="selectedDetailsScreen">
-        <ng-template [ngSwitchCase]="'details'">
-            <app-item-details [item]="item" (itemSaved)="onItemSaved($event)" (usersRequested)="onUsersRequested($event)"></app-item-details>
-        </ng-template>
-        <ng-template [ngSwitchCase]="'tasks'">
-            <app-item-tasks [tasks$]="tasks$" (addNewTask)="onAddNewTask($event)" (updateTask)="onUpdateTask($event)"></app-item-tasks>
-        </ng-template>
-        <ng-template [ngSwitchCase]="'chitchat'">
-            <app-item-chitchat [comments$]="comments$" [currentUser]="currentUser$ | async" (addNewComment)="onAddNewComment($event)"></app-item-chitchat>
-        </ng-template>
-    </div>
+    <kendo-tabstrip (tabSelect)="onTabSelect($event)">
+        <kendo-tabstrip-tab title="Details" [selected]="isTabSelected('details')">
+            <ng-template kendoTabContent>
+                <app-item-details [item]="item" (itemSaved)="onItemSaved($event)" (usersRequested)="onUsersRequested($event)"></app-item-details>
+            </ng-template>
+        </kendo-tabstrip-tab>
+        <kendo-tabstrip-tab title="Tasks" [selected]="isTabSelected('tasks')">
+            <ng-template kendoTabContent>
+                <app-item-tasks [tasks$]="tasks$" (addNewTask)="onAddNewTask($event)" (updateTask)="onUpdateTask($event)"></app-item-tasks>
+            </ng-template>
+        </kendo-tabstrip-tab>
+        <kendo-tabstrip-tab title="Chitchat" [selected]="isTabSelected('chitchat')">
+            <ng-template kendoTabContent>
+                <app-item-chitchat [comments$]="comments$" [currentUser]="currentUser$ | async" (addNewComment)="onAddNewComment($event)"></app-item-chitchat>
+            </ng-template>
+        </kendo-tabstrip-tab>
+    </kendo-tabstrip>
+
 </div>

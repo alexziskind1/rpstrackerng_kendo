@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LayoutModule } from '@progress/kendo-angular-layout';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 
@@ -16,6 +17,7 @@ import { SideMenuComponent } from './components/side-menu/side-menu.component';
         FormsModule,
         RouterModule,
         NgbModule,
+        LayoutModule,
         ButtonsModule,
         DropDownsModule
     ],
@@ -25,6 +27,7 @@ import { SideMenuComponent } from './components/side-menu/side-menu.component';
         SideMenuComponent,
         PresetFilterComponent,
         NgbModule,
+        LayoutModule,
         ButtonsModule,
         DropDownsModule
     ],

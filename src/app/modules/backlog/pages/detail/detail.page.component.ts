@@ -3,12 +3,16 @@ import { ActivatedRoute } from '@angular/router';
 
 import { Subscription, BehaviorSubject, Observable } from 'rxjs';
 
+import { SelectEvent } from '@progress/kendo-angular-layout';
+
 import { DetailScreenType } from 'src/app/shared/models/ui/types/detail-screens';
 import { PtItem, PtTask, PtComment, PtUser } from 'src/app/core/models/domain';
 import { BacklogService } from '../../services/backlog.service';
 import { PtUserService, NavigationService } from 'src/app/core/services';
 import { PtNewTask, PtTaskUpdate, PtNewComment } from 'src/app/shared/models/dto';
 import { Store } from 'src/app/core/state/app-store';
+import { setRenderer } from '@angular/core/src/render3/state';
+
 
 @Component({
     selector: 'app-backlog-detail-page',
@@ -51,9 +55,14 @@ export class DetailPageComponent implements OnInit, OnDestroy {
         }
     }
 
-    public onScreenSelected(screen: DetailScreenType) {
-        this.selectedDetailsScreen = screen;
-        this.navigationService.navigate([`/detail/${this.itemId}/${screen}`]);
+    public isTabSelected(screen: DetailScreenType) {
+        return this.selectedDetailsScreen === screen;
+    }
+
+    public onTabSelect(e: SelectEvent) {
+        console.log(e.title);
+        this.selectedDetailsScreen = e.title as DetailScreenType;
+        this.navigationService.navigate([`/detail/${this.itemId}/${e.title.toLowerCase()}`]);
     }
 
     public onUsersRequested(name: string) {

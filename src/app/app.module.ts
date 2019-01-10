@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -9,11 +10,6 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
-import { ButtonsModule } from '@progress/kendo-angular-buttons';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
-
-
 
 
 @NgModule({
@@ -28,9 +24,7 @@ import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
     SharedModule,
     DashboardModule,
     BacklogModule,
-    ButtonsModule,
-    BrowserAnimationsModule,
-    DropDownsModule
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

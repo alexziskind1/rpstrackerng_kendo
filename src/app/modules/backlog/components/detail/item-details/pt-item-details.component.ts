@@ -47,6 +47,11 @@ export class PtItemDetailsComponent implements OnInit {
         }
     }
 
+    public getPriorityClass(priority: PriorityEnum): string {
+        const indicatorClass = PriorityEnum.getIndicatorClass(priority);
+        return indicatorClass;
+    }
+
     public onBlurTextField() {
         this.notifyUpdateItem();
     }

@@ -23,6 +23,7 @@
     "@progress/kendo-angular-buttons": "^4.3.2",
     "@progress/kendo-angular-charts": "^3.6.0",
     "@progress/kendo-angular-dropdowns": "^3.4.1",
+    "@progress/kendo-angular-inputs": "^3.5.0",
     "@progress/kendo-angular-intl": "^1.4.0",
     "@progress/kendo-angular-l10n": "^1.1.0",
     "@progress/kendo-angular-layout": "^3.2.0",

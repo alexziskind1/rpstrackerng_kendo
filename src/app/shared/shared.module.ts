@@ -6,6 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LayoutModule } from '@progress/kendo-angular-layout';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
+import { InputsModule } from '@progress/kendo-angular-inputs';
 
 import { PresetFilterComponent } from './components/preset-filter/preset-filter.component';
 
@@ -19,7 +20,8 @@ import { SideMenuComponent } from './components/side-menu/side-menu.component';
         NgbModule,
         LayoutModule,
         ButtonsModule,
-        DropDownsModule
+        DropDownsModule,
+        InputsModule
     ],
     exports: [
         FormsModule,
@@ -29,7 +31,8 @@ import { SideMenuComponent } from './components/side-menu/side-menu.component';
         NgbModule,
         LayoutModule,
         ButtonsModule,
-        DropDownsModule
+        DropDownsModule,
+        InputsModule
     ],
     declarations: [
         MainMenuComponent,

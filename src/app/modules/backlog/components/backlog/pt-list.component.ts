@@ -30,4 +30,5 @@ export class PtListComponent {
     public listItemTap(item: PtItem) {
         this.listItemSelected.emit(item);
     }
+
 }

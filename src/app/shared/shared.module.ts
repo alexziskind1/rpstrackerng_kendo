@@ -7,6 +7,7 @@ import { LayoutModule } from '@progress/kendo-angular-layout';
 import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
+import { GridModule } from '@progress/kendo-angular-grid';
 
 import { PresetFilterComponent } from './components/preset-filter/preset-filter.component';
 
@@ -21,7 +22,8 @@ import { SideMenuComponent } from './components/side-menu/side-menu.component';
         LayoutModule,
         ButtonsModule,
         DropDownsModule,
-        InputsModule
+        InputsModule,
+        GridModule
     ],
     exports: [
         FormsModule,
@@ -32,7 +34,8 @@ import { SideMenuComponent } from './components/side-menu/side-menu.component';
         LayoutModule,
         ButtonsModule,
         DropDownsModule,
-        InputsModule
+        InputsModule,
+        GridModule
     ],
     declarations: [
         MainMenuComponent,

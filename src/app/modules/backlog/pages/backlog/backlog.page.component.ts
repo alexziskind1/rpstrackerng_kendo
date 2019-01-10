@@ -12,6 +12,9 @@ import { PtNewItem } from 'src/app/shared/models/dto';
 import { EMPTY_STRING } from 'src/app/core/helpers';
 import { ItemType } from 'src/app/core/constants';
 import { Store } from 'src/app/core/state/app-store';
+import { PageChangeEvent, GridDataResult, SelectableSettings, SelectionEvent } from '@progress/kendo-angular-grid';
+import { PriorityEnum } from 'src/app/core/models/domain/enums';
+import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
 
 @Component({
     selector: 'app-backlog',
@@ -22,6 +25,18 @@ export class BacklogPageComponent implements OnInit {
 
     private itemsSub: Subscription | undefined;
     public items$: BehaviorSubject<PtItem[]> = new BehaviorSubject<PtItem[]>([]);
+    public currentPreset: PresetType = 'open';
+    public gridView: GridDataResult | undefined;
+    public pageSize = 10;
+    public skip = 0;
+    public sort: SortDescriptor[] = [{
+        field: 'title',
+        dir: 'asc'
+    }];
+
+    public checkboxOnly = false;
+    public mode: any;
+    public selectableSettings: SelectableSettings | undefined;
 
     public itemTypesProvider = ItemType.List.map((t) => t.PtItemType);
     public newItem: PtNewItem | undefined;
@@ -35,19 +50,38 @@ export class BacklogPageComponent implements OnInit {
     ) { }
 
     public ngOnInit() {
+
+        this.selectableSettings = {
+            checkboxOnly: this.checkboxOnly,
+            mode: this.mode
+        };
+
+        this.items$.subscribe(items => {
+            this.gridView = {
+                data: orderBy(items.slice(this.skip, this.skip + this.pageSize), this.sort),
+                total: items.length
+            };
+        });
+
         this.activatedRoute.params.subscribe(params => {
             if (this.itemsSub) {
                 this.itemsSub.unsubscribe();
             }
             const reqPreset = params['preset'] as PresetType;
             if (reqPreset) {
-                this.itemsSub = this.backlogService.getItems(reqPreset)
-                    .subscribe(items => {
-                        this.items$.next(items);
-                    });
+                this.currentPreset = reqPreset;
+                this.refresh();
             }
         });
         this.resetModalFields();
+    }
+
+    private refresh() {
+        this.itemsSub = this.backlogService.getItems(this.currentPreset)
+            .subscribe(items => {
+                this.items$.next(items);
+
+            });
     }
 
     private resetModalFields() {
@@ -56,6 +90,34 @@ export class BacklogPageComponent implements OnInit {
             description: EMPTY_STRING,
             type: 'PBI'
         };
+    }
+
+    public getIndicatorImage(item: PtItem) {
+        return ItemType.imageResFromType(item.type);
+    }
+
+
+    public getPriorityClass(item: PtItem): string {
+        const indicatorClass = PriorityEnum.getIndicatorClass(item.priority);
+        return indicatorClass;
+    }
+
+    public onPageChange(args: PageChangeEvent) {
+        this.skip = args.skip;
+        this.refresh();
+    }
+
+    public onSortChange(args: SortDescriptor[]) {
+        this.sort = args;
+        if (this.sort[0].field === 'assignee') {
+            this.sort[0].field = 'assignee.fullName';
+        }
+        this.refresh();
+    }
+
+    public onSelectionChange(args: SelectionEvent) {
+        const selItem = args.selectedRows[0].dataItem as PtItem;
+        this.navigationService.navigate(['/detail', selItem.id]);
     }
 
     public selectListItem(item: PtItem) {

@@ -71,6 +71,13 @@ export class BacklogService {
                 tap((ptItem: PtItem) => {
                     this.setUserAvatarUrl(ptItem.assignee);
                     ptItem.comments.forEach(c => this.setUserAvatarUrl(c.user));
+                    ptItem.tasks.forEach(t => {
+                        t.dateCreated = new Date(t.dateCreated);
+                        t.dateDeleted = t.dateDeleted ? new Date(t.dateDeleted) : undefined;
+                        t.dateEnd = t.dateEnd ? new Date(t.dateEnd) : undefined;
+                        t.dateModified = new Date(t.dateModified);
+                        t.dateStart = t.dateStart ? new Date(t.dateStart) : undefined;
+                    });
                 })
             );
     }
@@ -128,7 +135,9 @@ export class BacklogService {
             title: newTask.title,
             completed: false,
             dateCreated: new Date(),
-            dateModified: new Date()
+            dateModified: new Date(),
+            dateStart: newTask.dateStart ? newTask.dateStart : undefined,
+            dateEnd: newTask.dateEnd ? newTask.dateEnd : undefined
         };
         return new Promise<PtTask>((resolve, reject) => {
             this.repo.insertPtTask(
@@ -148,7 +157,9 @@ export class BacklogService {
             title: newTitle ? newTitle : task.title,
             completed: toggle ? !task.completed : task.completed,
             dateCreated: task.dateCreated,
-            dateModified: new Date()
+            dateModified: new Date(),
+            dateStart: task.dateStart ? task.dateStart : undefined,
+            dateEnd: task.dateEnd ? task.dateEnd : undefined
         };
 
         return new Promise<PtTask>((resolve, reject) => {

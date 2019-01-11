@@ -5,7 +5,7 @@ import { PtTask } from '../../../../../core/models/domain';
 import { PtNewTask, PtTaskUpdate } from '../../../../../shared/models/dto';
 import { EMPTY_STRING } from '../../../../../core/helpers/string-helpers';
 import { BehaviorSubject } from 'rxjs';
-import { SchedulerEvent, SaveEvent } from '@progress/kendo-angular-scheduler';
+import { SchedulerEvent, SaveEvent, RemoveEvent } from '@progress/kendo-angular-scheduler';
 
 
 @Component({
@@ -45,9 +45,12 @@ export class PtItemTaskScheduleComponent implements OnInit {
                 };
                 return evt;
             });
-            this.events = sevents;
-            const minDate = new Date(Math.min.apply(null, sevents.map((e) => new Date(e.start).valueOf())));
-            this.displayDate = minDate;
+
+            if (sevents.length > 0) {
+                this.events = sevents;
+                const minDate = new Date(Math.min.apply(null, sevents.map((e) => new Date(e.start).valueOf())));
+                this.displayDate = minDate;
+            }
         });
     }
 
@@ -74,7 +77,7 @@ export class PtItemTaskScheduleComponent implements OnInit {
         return (len === 0) ? 1 : this.events[this.events.length - 1].id + 1;
     }
 
-    public save(args: SaveEvent) {
+    public onSave(args: SaveEvent) {
         if (args.isNew) {
             const newTask: PtNewTask = {
                 // TODO: Change this to appropriate collection when implemented in scheduler
@@ -100,53 +103,19 @@ export class PtItemTaskScheduleComponent implements OnInit {
         }
     }
 
-    public onAddTapped(newTaskTextField: any) {
-        const newTitle = this.newTaskTitle.trim();
-        if (newTitle.length === 0) {
-            return;
+    public onRemove(args: RemoveEvent) {
+        // TODO: This is not implemented at the correct momemt - right now this event is
+        // triggered when the 'x' on the event is hit, but there is no other event for removal.
+        const taskToDelete = this.tasks$.value.find(t => t.id === args.event.id);
+        if (taskToDelete) {
+            const taskUpdate: PtTaskUpdate = {
+                task: taskToDelete,
+                toggle: false,
+                delete: true
+            };
+
+            // this.updateTask.emit(taskUpdate);
         }
-        const newTask: PtNewTask = {
-            title: newTitle,
-            completed: false
-        };
-        this.addNewTask.emit(newTask);
-        this.newTaskTitle = EMPTY_STRING;
     }
 
-    public toggleTapped(task: PtTask) {
-        const taskUpdate: PtTaskUpdate = {
-            task: task,
-            toggle: true
-        };
-        this.updateTask.emit(taskUpdate);
-    }
-
-    public taskTitleChange(task: PtTask, newTitle: string) {
-        if (task.title === newTitle) {
-            return;
-        }
-        this.lastUpdatedTitle = newTitle;
-    }
-
-    public taskBlurred(task: PtTask) {
-        if (task.title === this.lastUpdatedTitle) {
-            return;
-        }
-        const taskUpdate: PtTaskUpdate = {
-            task: task,
-            toggle: false,
-            newTitle: this.lastUpdatedTitle
-        };
-        this.updateTask.emit(taskUpdate);
-        this.lastUpdatedTitle = EMPTY_STRING;
-    }
-
-    public taskDelete(task: PtTask) {
-        const taskUpdate: PtTaskUpdate = {
-            task: task,
-            toggle: false,
-            delete: true
-        };
-        this.updateTask.emit(taskUpdate);
-    }
 }

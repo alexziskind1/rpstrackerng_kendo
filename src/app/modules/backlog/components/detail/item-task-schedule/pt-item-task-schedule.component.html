@@ -1,0 +1,17 @@
+<kendo-scheduler [kendoSchedulerBinding]="events" [kendoSchedulerReactiveEditing]="createFormGroup" [selectedDate]="displayDate"
+    (save)="save($event)" [editable]="true" style="height: 600px;">
+    <kendo-scheduler-day-view [startTime]="startTime">
+    </kendo-scheduler-day-view>
+
+    <kendo-scheduler-week-view [startTime]="startTime">
+    </kendo-scheduler-week-view>
+
+    <kendo-scheduler-month-view>
+    </kendo-scheduler-month-view>
+
+    <kendo-scheduler-timeline-view>
+    </kendo-scheduler-timeline-view>
+
+    <kendo-scheduler-agenda-view>
+    </kendo-scheduler-agenda-view>
+</kendo-scheduler>

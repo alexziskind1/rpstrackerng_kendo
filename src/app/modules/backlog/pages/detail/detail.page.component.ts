@@ -48,7 +48,7 @@ export class DetailPageComponent implements OnInit, OnDestroy {
             });
 
         const screen = this.activatedRoute.snapshot.params['screen'] as DetailScreenType;
-        if (screen === 'details' || screen === 'tasks' || screen === 'chitchat') {
+        if (screen === 'details' || screen === 'tasks' || screen === 'chitchat' || screen === 'schedule') {
             this.selectedDetailsScreen = screen;
         } else {
             this.navigationService.navigate([`/detail/${this.itemId}/details`]);

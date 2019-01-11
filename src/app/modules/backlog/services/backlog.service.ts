@@ -12,6 +12,7 @@ import { getUserAvatarUrl } from '../../../core/helpers/user-avatar-helper';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { PresetType } from 'src/app/core/models/domain/types';
+import { datesForTask } from 'src/app/core/helpers/date-utils';
 
 @Injectable()
 export class BacklogService {
@@ -71,13 +72,7 @@ export class BacklogService {
                 tap((ptItem: PtItem) => {
                     this.setUserAvatarUrl(ptItem.assignee);
                     ptItem.comments.forEach(c => this.setUserAvatarUrl(c.user));
-                    ptItem.tasks.forEach(t => {
-                        t.dateCreated = new Date(t.dateCreated);
-                        t.dateDeleted = t.dateDeleted ? new Date(t.dateDeleted) : undefined;
-                        t.dateEnd = t.dateEnd ? new Date(t.dateEnd) : undefined;
-                        t.dateModified = new Date(t.dateModified);
-                        t.dateStart = t.dateStart ? new Date(t.dateStart) : undefined;
-                    });
+                    ptItem.tasks.forEach(t => datesForTask(t));
                 })
             );
     }
@@ -106,6 +101,7 @@ export class BacklogService {
                          this.store.set('backlogItems', [nextItem, ...this.store.value.backlogItems]);
                      });
                      */
+                    nextItem.tasks.forEach(t => datesForTask(t));
                     resolve(nextItem);
                 }
             );
@@ -144,11 +140,13 @@ export class BacklogService {
                 task,
                 currentItem.id,
                 (nextTask: PtTask) => {
+                    datesForTask(nextTask);
                     resolve(nextTask);
                 }
             );
         });
     }
+
 
     public updatePtTask(currentItem: PtItem, task: PtTask, toggle: boolean, newTitle?: string): Promise<PtTask> {
 
@@ -165,6 +163,7 @@ export class BacklogService {
         return new Promise<PtTask>((resolve, reject) => {
             this.repo.updatePtTask(taskToUpdate, currentItem.id,
                 (updatedTask: PtTask) => {
+                    datesForTask(updatedTask);
                     resolve(updatedTask);
                 }
             );

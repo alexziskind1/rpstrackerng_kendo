@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import { DashboardRepository, DashboardFilter } from '../repositories/dashboard.repository';
+import { DashboardRepository, DashboardFilter, FilteredIssues } from '../repositories/dashboard.repository';
 import { TypeCounts, PriorityCounts, StatusCounts } from '../models';
 
 @Injectable()
@@ -22,5 +22,9 @@ export class DashboardService {
 
     public getTypeCounts(filter: DashboardFilter): Observable<TypeCounts> {
         return this.repo.getTypeCounts(filter);
+    }
+
+    public getFilteredIssues(filter: DashboardFilter): Observable<FilteredIssues> {
+        return this.repo.getFilteredIssues(filter);
     }
 }

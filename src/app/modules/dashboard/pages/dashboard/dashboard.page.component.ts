@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DashboardService } from '../../services/dashboard.service';
-import { DashboardFilter } from '../../repositories/dashboard.repository';
+import { DashboardFilter, FilteredIssues } from '../../repositories/dashboard.repository';
 import { Store } from 'src/app/core/state/app-store';
 import { StatusCounts } from '../../models';
 import { BehaviorSubject, Subscription, Observable } from 'rxjs';
 import { PtUserService } from 'src/app/core/services';
 import { PtUser } from 'src/app/core/models/domain';
-
 
 interface DateRange {
     dateStart: Date;
@@ -20,7 +19,8 @@ interface DateRange {
 })
 export class DashboardPageComponent implements OnInit, OnDestroy {
 
-    private sub: Subscription | undefined;
+    private statusCountSub: Subscription | undefined;
+    private issuesSub: Subscription | undefined;
     public filter: DashboardFilter = {};
     public filteredDateStart: Date | undefined;
     public filteredDateEnd: Date | undefined;
@@ -33,6 +33,14 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     });
 
     public users$: Observable<PtUser[]> = this.store.select<PtUser[]>('users');
+    public issuesAll$: BehaviorSubject<FilteredIssues> = new BehaviorSubject<FilteredIssues>({
+        categories: [],
+        items: []
+    });
+
+    public categories: Date[] = [];
+    public itemsOpenByMonth: number[] = [];
+    public itemsClosedByMonth: number[] = [];
 
     private get currentUserId() {
         if (this.store.value.currentUser) {
@@ -49,6 +57,16 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit() {
+        this.issuesAll$.subscribe((issues: FilteredIssues) => {
+            this.categories = issues.categories.map(c => new Date(c));
+
+            this.itemsOpenByMonth = [];
+            this.itemsClosedByMonth = [];
+            issues.items.forEach((item, index) => {
+                this.itemsOpenByMonth.push(item.open.length);
+                this.itemsClosedByMonth.push(item.closed.length);
+            });
+        });
         this.refresh();
     }
 
@@ -78,17 +96,17 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
     }
 
     private refresh() {
-        this.sub = this.dashboardService.getStatusCounts(this.filter)
+        this.statusCountSub = this.dashboardService.getStatusCounts(this.filter)
             .subscribe(result => {
                 this.statusCounts$.next(result);
             });
+
+        this.issuesSub = this.dashboardService.getFilteredIssues(this.filter)
+            .subscribe((result: FilteredIssues) => {
+                this.issuesAll$.next(result);
+            });
     }
 
-    public ngOnDestroy() {
-        if (this.sub) {
-            this.sub.unsubscribe();
-        }
-    }
 
     private getDateRange(months: number): DateRange {
         const now = new Date();
@@ -98,5 +116,14 @@ export class DashboardPageComponent implements OnInit, OnDestroy {
             dateStart: start,
             dateEnd: now
         };
+    }
+
+    public ngOnDestroy() {
+        if (this.statusCountSub) {
+            this.statusCountSub.unsubscribe();
+        }
+        if (this.issuesSub) {
+            this.issuesSub.unsubscribe();
+        }
     }
 }

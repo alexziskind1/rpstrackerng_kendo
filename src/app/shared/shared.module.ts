@@ -8,11 +8,14 @@ import { ButtonsModule } from '@progress/kendo-angular-buttons';
 import { DropDownsModule } from '@progress/kendo-angular-dropdowns';
 import { InputsModule } from '@progress/kendo-angular-inputs';
 import { GridModule } from '@progress/kendo-angular-grid';
+import { ChartsModule } from '@progress/kendo-angular-charts';
 
 import { PresetFilterComponent } from './components/preset-filter/preset-filter.component';
 
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
 import { SideMenuComponent } from './components/side-menu/side-menu.component';
+
+import 'hammerjs';
 
 @NgModule({
     imports: [
@@ -23,7 +26,8 @@ import { SideMenuComponent } from './components/side-menu/side-menu.component';
         ButtonsModule,
         DropDownsModule,
         InputsModule,
-        GridModule
+        GridModule,
+        ChartsModule
     ],
     exports: [
         FormsModule,
@@ -35,7 +39,8 @@ import { SideMenuComponent } from './components/side-menu/side-menu.component';
         ButtonsModule,
         DropDownsModule,
         InputsModule,
-        GridModule
+        GridModule,
+        ChartsModule
     ],
     declarations: [
         MainMenuComponent,

@@ -47,4 +47,29 @@
 
 
     <app-active-issues [statusCounts]="statusCounts$ | async"></app-active-issues>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h3>All issues</h3>
+            <kendo-chart>
+                <kendo-chart-series-defaults type="column" [stack]="true" [gap]="0.06" [overlay]="false"></kendo-chart-series-defaults>
+
+
+                <kendo-chart-category-axis>
+                    <kendo-chart-category-axis-item [categories]="categories" [baseUnit]="'months'" [majorTicks]="{visible: false}"
+                        [line]="{visible: false}" [majorGridLines]="{visible: false}" [labels]="{rotation: 'auto', margin: { top: 8 }}"></kendo-chart-category-axis-item>
+                </kendo-chart-category-axis>
+
+                <kendo-chart-series>
+                    <kendo-chart-series-item [data]="itemsOpenByMonth" [opacity]="0.7" [color]="'#CC3458'">
+                    </kendo-chart-series-item>
+
+                    <kendo-chart-series-item [data]="itemsClosedByMonth" [opacity]="0.7" [color]="'#35C473'">
+                    </kendo-chart-series-item>
+                </kendo-chart-series>
+
+            </kendo-chart>
+        </div>
+    </div>
 </div>

@@ -4,7 +4,7 @@
         <app-preset-filter></app-preset-filter>
 
         <div class="btn-group mr-2">
-            <button type="button" (click)="onAddTap(content)" class="btn btn-sm btn-outline-secondary">Add</button>
+            <button kendoButton type="button" (click)="onAddTap(content)" class="btn btn-sm btn-outline-secondary" icon="plus">Add</button>
         </div>
 
     </div>
@@ -52,18 +52,18 @@
     </div>
     <div class="modal-body">
         <form>
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Title</label>
-                <div class="col-sm-10">
-                    <input class="form-control" [(ngModel)]="newItem.title" name="title" />
-                </div>
+            <div class="form-group">
+                <kendo-textbox-container floatingLabel="Title" style="width: 100%;">
+                    <input kendoTextBox [(ngModel)]="newItem.title" name="title" />
+                </kendo-textbox-container>
             </div>
 
-            <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Description</label>
-                <div class="col-sm-10">
-                    <textarea class="form-control" [(ngModel)]="newItem.description" name="description"></textarea>
-                </div>
+            <div class="form-group">
+
+                <kendo-textbox-container floatingLabel="Description" style="width: 100%;">
+                    <textarea kendoTextArea [(ngModel)]="newItem.description" name="description"></textarea>
+                </kendo-textbox-container>
+
             </div>
 
             <div class="form-group row">

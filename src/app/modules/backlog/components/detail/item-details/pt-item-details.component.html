@@ -24,6 +24,12 @@
         <div class="col-sm-10">
             <kendo-dropdownlist [data]="itemTypesProvider" [(ngModel)]="itemForm.typeStr" (valueChange)="onDropdownChange($event)"
                 name="itemType">
+
+                <ng-template kendoDropDownListItemTemplate let-dataItem>
+                    <img [src]="getIndicatorImage(dataItem)" class="backlog-icon">
+                    <span [class]="'badge ' + getPriorityClass(dataItem)">{{ dataItem }}</span>
+                </ng-template>
+
             </kendo-dropdownlist>
         </div>
     </div>

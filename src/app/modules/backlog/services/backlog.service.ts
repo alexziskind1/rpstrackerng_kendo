@@ -12,7 +12,7 @@ import { getUserAvatarUrl } from '../../../core/helpers/user-avatar-helper';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { PresetType } from 'src/app/core/models/domain/types';
-import { datesForTask } from 'src/app/core/helpers/date-utils';
+import { datesForTask, datesForPtItem } from 'src/app/core/helpers/date-utils';
 
 @Injectable()
 export class BacklogService {
@@ -40,6 +40,7 @@ export class BacklogService {
             .pipe(
                 map((ptItems: PtItem[]) => {
                     ptItems.forEach(i => {
+                        datesForPtItem(i);
                         this.setUserAvatarUrl(i.assignee);
                         i.comments.forEach(c => this.setUserAvatarUrl(c.user));
                     });

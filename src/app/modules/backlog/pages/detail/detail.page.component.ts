@@ -60,9 +60,9 @@ export class DetailPageComponent implements OnInit, OnDestroy {
     }
 
     public onTabSelect(e: SelectEvent) {
-        console.log(e.title);
-        this.selectedDetailsScreen = e.title as DetailScreenType;
-        this.navigationService.navigate([`/detail/${this.itemId}/${e.title.toLowerCase()}`]);
+        const screen = e.title.toLowerCase() as DetailScreenType;
+        this.selectedDetailsScreen = screen;
+        this.navigationService.navigate([`/detail/${this.itemId}/${screen}`]);
     }
 
     public onUsersRequested(name: string) {

@@ -14,7 +14,7 @@ import { ItemType } from 'src/app/core/constants';
 import { Store } from 'src/app/core/state/app-store';
 import { PageChangeEvent, GridDataResult, SelectableSettings, SelectionEvent } from '@progress/kendo-angular-grid';
 import { PriorityEnum } from 'src/app/core/models/domain/enums';
-import { SortDescriptor, orderBy } from '@progress/kendo-data-query';
+import { SortDescriptor, orderBy, State, process } from '@progress/kendo-data-query';
 
 @Component({
     selector: 'app-backlog',
@@ -26,7 +26,7 @@ export class BacklogPageComponent implements OnInit {
     private itemsSub: Subscription | undefined;
     public items$: BehaviorSubject<PtItem[]> = new BehaviorSubject<PtItem[]>([]);
     public currentPreset: PresetType = 'open';
-    public gridView: GridDataResult | undefined;
+    public gridData: GridDataResult | undefined;
     public pageSize = 10;
     public skip = 0;
     public sort: SortDescriptor[] = [{
@@ -34,12 +34,24 @@ export class BacklogPageComponent implements OnInit {
         dir: 'asc'
     }];
 
+    public gridState: State = {
+        skip: 0,
+        take: 10,
+        sort: [],
+        group: []
+    };
+
     public checkboxOnly = false;
     public mode: any;
     public selectableSettings: SelectableSettings | undefined;
 
     public itemTypesProvider = ItemType.List.map((t) => t.PtItemType);
     public newItem: PtNewItem | undefined;
+
+    public filter = {
+        logic: 'and',
+        filters: [{ field: 'title', operator: 'contains', value: 'Cross' }]
+    };
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -53,14 +65,17 @@ export class BacklogPageComponent implements OnInit {
 
         this.selectableSettings = {
             checkboxOnly: this.checkboxOnly,
-            mode: this.mode
+            // mode: this.mode
         };
 
-        this.items$.subscribe(items => {
-            this.gridView = {
+        this.items$.subscribe((items: PtItem[]) => {
+            this.gridData = process(items, this.gridState);
+            /*
+            this.gridData = {
                 data: orderBy(items.slice(this.skip, this.skip + this.pageSize), this.sort),
                 total: items.length
             };
+            */
         });
 
         this.activatedRoute.params.subscribe(params => {
@@ -70,15 +85,21 @@ export class BacklogPageComponent implements OnInit {
             const reqPreset = params['preset'] as PresetType;
             if (reqPreset) {
                 this.currentPreset = reqPreset;
+                this.gridState.skip = 0;
                 this.refresh();
             }
         });
         this.resetModalFields();
     }
 
+    public onDataStateChange(newState: State) {
+        this.gridState = newState;
+        this.refresh();
+    }
+
     private refresh() {
         this.itemsSub = this.backlogService.getItems(this.currentPreset)
-            .subscribe(items => {
+            .subscribe((items: PtItem[]) => {
                 this.items$.next(items);
 
             });
@@ -114,6 +135,8 @@ export class BacklogPageComponent implements OnInit {
         }
         this.refresh();
     }
+
+
 
     public onSelectionChange(args: SelectionEvent) {
         const selItem = args.selectedRows[0].dataItem as PtItem;

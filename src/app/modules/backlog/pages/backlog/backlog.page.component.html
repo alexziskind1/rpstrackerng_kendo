@@ -10,10 +10,11 @@
     </div>
 </div>
 
-<kendo-grid [data]="gridView" [pageSize]="pageSize" [skip]="skip" [pageable]="true" (pageChange)="onPageChange($event)"
-    [sortable]="true" [sort]="sort" (sortChange)="onSortChange($event)" [selectable]="selectableSettings"
-    (selectionChange)="onSelectionChange($event)" [height]="410">
-    <kendo-grid-column field="type" title="" width="40">
+<kendo-grid [data]="gridData" [pageSize]="gridState.take" [skip]="gridState.skip" [pageable]="true" [sortable]="true"
+    [groupable]="true" [group]="gridState.group" [sort]="gridState.sort" [filterable]="true" [filter]="gridState.filter"
+    [selectable]="selectableSettings" (dataStateChange)="onDataStateChange($event)" (selectionChange)="onSelectionChange($event)"
+    [height]="410">
+    <kendo-grid-column field="type" title="" [filterable]="false" width="40">
         <ng-template kendoGridCellTemplate let-dataItem>
             <img [src]="getIndicatorImage(dataItem)" class="backlog-icon" />
         </ng-template>
@@ -35,7 +36,8 @@
     </kendo-grid-column>
     <kendo-grid-column field="estimate" title="Estimate" width="100">
     </kendo-grid-column>
-    <kendo-grid-column field="dateCreated" title="Created" width="160">
+
+    <kendo-grid-column field="dateCreated" title="Created" width="160" filter="date">
         <ng-template kendoGridCellTemplate let-dataItem>
             <span class="li-date">{{ dataItem.dateCreated | date }}</span>
         </ng-template>

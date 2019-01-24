@@ -26,8 +26,8 @@
                 name="itemType">
 
                 <ng-template kendoDropDownListItemTemplate let-dataItem>
-                    <img [src]="getIndicatorImage(dataItem)" class="backlog-icon">
-                    <span [class]="'badge ' + getPriorityClass(dataItem)">{{ dataItem }}</span>
+                    <img [src]="getIndicatorImage(dataItem)" class="backlog-icon" />
+                    <span>{{ dataItem }}</span>
                 </ng-template>
 
             </kendo-dropdownlist>

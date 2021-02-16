@@ -10,6 +10,10 @@ import { DashboardModule } from './modules/dashboard/dashboard.module';
 
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
+import { GridModule } from '@progress/kendo-angular-grid';
+import { LayoutModule } from '@progress/kendo-angular-layout';
+
+
 
 @NgModule({
   declarations: [
@@ -24,6 +28,8 @@ import { SharedModule } from './shared/shared.module';
     DashboardModule,
     BacklogModule,
     BrowserAnimationsModule,
+    GridModule,
+    LayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

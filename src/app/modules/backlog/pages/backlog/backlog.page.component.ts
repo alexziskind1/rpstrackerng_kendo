@@ -139,8 +139,10 @@ export class BacklogPageComponent implements OnInit {
 
 
     public onSelectionChange(args: SelectionEvent) {
-        const selItem = args.selectedRows[0].dataItem as PtItem;
-        this.navigationService.navigate(['/detail', selItem.id]);
+        if (args.selectedRows) {
+            const selItem = args.selectedRows[0].dataItem as PtItem;
+            this.navigationService.navigate(['/detail', selItem.id]);
+        }
     }
 
     public selectListItem(item: PtItem) {

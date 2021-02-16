@@ -32,7 +32,6 @@
     "@progress/kendo-angular-l10n": "^3.0.0",
     "@progress/kendo-angular-layout": "^6.1.2",
     "@progress/kendo-angular-popup": "^4.0.0",
-    "@progress/kendo-angular-resize-sensor": "^3.2.0",
     "@progress/kendo-angular-scheduler": "^2.1.1",
     "@progress/kendo-data-query": "^1.5.4",
     "@progress/kendo-date-math": "^1.5.1",

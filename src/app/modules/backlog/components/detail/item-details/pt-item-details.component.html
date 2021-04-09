@@ -22,7 +22,7 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Item Type</label>
         <div class="col-sm-10">
-            <kendo-dropdownlist [data]="itemTypesProvider" [(ngModel)]="itemForm.typeStr" (valueChange)="onDropdownChange($event)"
+            <kendo-dropdownlist [data]="itemTypesProvider" [(ngModel)]="itemForm.typeStr" (valueChange)="onDropdownChange()"
                 name="itemType">
 
                 <ng-template kendoDropDownListItemTemplate let-dataItem>
@@ -37,7 +37,7 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Status</label>
         <div class="col-sm-10">
-            <kendo-dropdownlist [data]="statusesProvider" [(ngModel)]="itemForm.statusStr" (valueChange)="onDropdownChange($event)"
+            <kendo-dropdownlist [data]="statusesProvider" [(ngModel)]="itemForm.statusStr" (valueChange)="onDropdownChange()"
                 name="itemStatus">
             </kendo-dropdownlist>
         </div>
@@ -54,7 +54,7 @@
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">Priority</label>
         <div class="col-sm-10">
-            <kendo-dropdownlist [data]="prioritiesProvider" [(ngModel)]="itemForm.priorityStr" (valueChange)="onDropdownChange($event)"
+            <kendo-dropdownlist [data]="prioritiesProvider" [(ngModel)]="itemForm.priorityStr" (valueChange)="onDropdownChange()"
                 name="itemPriority">
 
                 <ng-template kendoDropDownListItemTemplate let-dataItem>
@@ -70,7 +70,7 @@
         <label class="col-sm-2 col-form-label">Assignee</label>
 
         <div class="col-sm-10">
-            <img [src]="selectedAssignee.avatar" class="li-avatar rounded" />
+            <img [src]="selectedAssignee?.avatar" class="li-avatar rounded" />
             <span>{{ itemForm.assigneeName }}</span>
 
             <button class="btn btn-sm btn-outline-secondary" (click)="assigneePickerOpen(content)">Pick assignee</button>

@@ -11,8 +11,6 @@ import { BacklogService } from '../../services/backlog.service';
 import { PtUserService, NavigationService } from 'src/app/core/services';
 import { PtNewTask, PtTaskUpdate, PtNewComment } from 'src/app/shared/models/dto';
 import { Store } from 'src/app/core/state/app-store';
-import { setRenderer } from '@angular/core/src/render3/state';
-
 
 @Component({
     selector: 'app-backlog-detail-page',

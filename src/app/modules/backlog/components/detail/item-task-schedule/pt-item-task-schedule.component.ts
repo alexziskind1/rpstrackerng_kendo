@@ -88,12 +88,12 @@ export class PtItemTaskScheduleComponent implements OnInit {
             };
             this.addNewTask.emit(newTask);
         } else {
-            const taskToUpdate = this.tasks$.value.find(t => t.id === args.event.id);
+            const taskToUpdate = this.tasks$.value.find(t => t.id === args.dataItem.id);
             if (taskToUpdate) {
                 // TODO: Change this to appropriate collection when implemented in scheduler
                 taskToUpdate.title = args.formGroup.controls['title'].value;
-                taskToUpdate.dateStart = args.event.start;
-                taskToUpdate.dateEnd = args.event.end;
+                taskToUpdate.dateStart = args.dataItem.start;
+                taskToUpdate.dateEnd = args.dataItem.end;
                 const taskUpdate: PtTaskUpdate = {
                     task: taskToUpdate,
                     toggle: false

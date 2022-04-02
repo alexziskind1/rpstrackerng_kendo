@@ -10,16 +10,19 @@
     </div>
 </div>
 
-<kendo-grid [data]="gridData" [pageSize]="gridState.take" [skip]="gridState.skip" [pageable]="true" [sortable]="true"
-    [groupable]="true" [group]="gridState.group" [sort]="gridState.sort" [filterable]="true" [filter]="gridState.filter"
-    [selectable]="selectableSettings" (dataStateChange)="onDataStateChange($event)" (selectionChange)="onSelectionChange($event)"
+<kendo-grid [data]="gridData" (dataStateChange)="onDataStateChange($event)"
+    [pageable]="true" [pageSize]="gridState.take" [skip]="gridState.skip"
+    [sortable]="true" [sort]="gridState.sort"
+    [filterable]="true" [filter]="gridState.filter"
+    [groupable]="true" [group]="gridState.group"
+    [selectable]="selectableSettings" (selectionChange)="onSelectionChange($event)"
     [height]="410">
     <kendo-grid-column field="type" title="" [filterable]="false" width="40">
         <ng-template kendoGridCellTemplate let-dataItem>
             <img [src]="getIndicatorImage(dataItem)" class="backlog-icon" />
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column field="assignee" title="Assignee" width="260">
+    <kendo-grid-column field="assignee.fullName" title="Assignee" width="260">
         <ng-template kendoGridCellTemplate let-dataItem>
             <div>
                 <img [src]="dataItem.assignee.avatar" class="li-avatar rounded mx-auto" />

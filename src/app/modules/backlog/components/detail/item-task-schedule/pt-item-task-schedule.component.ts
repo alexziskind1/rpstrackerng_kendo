@@ -1,12 +1,12 @@
 import { Component, Input, ChangeDetectionStrategy, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
+import { BehaviorSubject } from 'rxjs';
+
+import { SchedulerEvent, SaveEvent, RemoveEvent, CreateFormGroupArgs } from '@progress/kendo-angular-scheduler';
+
 import { PtTask } from '../../../../../core/models/domain';
 import { PtNewTask, PtTaskUpdate } from '../../../../../shared/models/dto';
-import { EMPTY_STRING } from '../../../../../core/helpers/string-helpers';
-import { BehaviorSubject } from 'rxjs';
-import { SchedulerEvent, SaveEvent, RemoveEvent } from '@progress/kendo-angular-scheduler';
-
 
 @Component({
     selector: 'app-item-task-schedule',
@@ -21,13 +21,9 @@ export class PtItemTaskScheduleComponent implements OnInit {
     @Output() addNewTask = new EventEmitter<PtNewTask>();
     @Output() updateTask = new EventEmitter<PtTaskUpdate>();
 
-    public newTaskTitle = EMPTY_STRING;
-    private lastUpdatedTitle = EMPTY_STRING;
-
     public displayDate = new Date();
     public startTime = '07:00';
     public events: SchedulerEvent[] = [];
-    public formGroup: FormGroup | undefined;
 
     constructor(private formBuilder: FormBuilder) {
         this.createFormGroup = this.createFormGroup.bind(this);
@@ -35,7 +31,7 @@ export class PtItemTaskScheduleComponent implements OnInit {
 
     public ngOnInit() {
         this.tasks$.subscribe(tasks => {
-            const sevents = tasks.filter(t => t.dateStart && t.dateEnd).map(t => {
+          this.events = tasks.filter(t => t.dateStart && t.dateEnd).map(t => {
                 const evt: SchedulerEvent = {
                     id: t.id,
                     title: t.title ? t.title : '',
@@ -46,30 +42,22 @@ export class PtItemTaskScheduleComponent implements OnInit {
                 return evt;
             });
 
-            if (sevents.length > 0) {
-                this.events = sevents;
-                const minDate = new Date(Math.min.apply(null, sevents.map((e) => new Date(e.start).valueOf())));
-                this.displayDate = minDate;
-            }
+          if (this.events.length > 0) {
+              const minDate = new Date(Math.min.apply(null, this.events.map((e) => new Date(e.start).valueOf())));
+              this.displayDate = minDate;
+          }
         });
     }
 
-    public createFormGroup(args: any): FormGroup {
-        const ev = args.event;
+    public createFormGroup(args: CreateFormGroupArgs): FormGroup {
+        const dataItem = args.dataItem;
 
-        this.formGroup = this.formBuilder.group({
-            'id': args.isNew ? this.getNextId() : ev.id,
-            'start': [ev.start, Validators.required],
-            'end': [ev.end, Validators.required],
-            'startTimezone': [ev.startTimezone],
-            'endTimezone': [ev.endTimezone],
-            'isAllDay': ev.isAllDay,
-            'title': ev.title,
-            'description': ev.description,
-            'recurrenceRule': ev.recurrenceRule
+        return this.formBuilder.group({
+            id: args.isNew ? this.getNextId() : dataItem.id,
+            title: dataItem.title,
+            start: [dataItem.start, Validators.required],
+            end: [dataItem.end, Validators.required],
         });
-
-        return this.formGroup;
     }
 
     public getNextId(): number {
@@ -77,36 +65,43 @@ export class PtItemTaskScheduleComponent implements OnInit {
         return (len === 0) ? 1 : this.events[this.events.length - 1].id + 1;
     }
 
-    public onSave(args: SaveEvent) {
-        if (args.isNew) {
+    public onSave(event: SaveEvent) {
+        if (event.formGroup.invalid) {
+          return;
+        }
+
+        const formGroup = event.formGroup;
+
+        if (event.isNew) {
             const newTask: PtNewTask = {
-                // TODO: Change this to appropriate collection when implemented in scheduler
-                title: args.formGroup.controls['title'].value,
+                title: formGroup.value.title,
                 completed: false,
-                dateStart: args.formGroup.controls['start'].value,
-                dateEnd: args.formGroup.controls['end'].value
+                dateStart: formGroup.value.start,
+                dateEnd: formGroup.value.end,
             };
+
             this.addNewTask.emit(newTask);
         } else {
-            const taskToUpdate = this.tasks$.value.find(t => t.id === args.dataItem.id);
+            const taskToUpdate = this.tasks$.value.find(t => t.id === event.dataItem.id);
+
             if (taskToUpdate) {
-                // TODO: Change this to appropriate collection when implemented in scheduler
-                taskToUpdate.title = args.formGroup.controls['title'].value;
-                taskToUpdate.dateStart = args.dataItem.start;
-                taskToUpdate.dateEnd = args.dataItem.end;
                 const taskUpdate: PtTaskUpdate = {
-                    task: taskToUpdate,
+                    task: {
+                        ...taskToUpdate,
+                        title: formGroup.controls.title.value,
+                        dateStart: formGroup.value.start,
+                        dateEnd: formGroup.value.end,
+                    },
                     toggle: false
                 };
+
                 this.updateTask.emit(taskUpdate);
             }
         }
     }
 
-    public onRemove(args: RemoveEvent) {
-        // TODO: This is not implemented at the correct momemt - right now this event is
-        // triggered when the 'x' on the event is hit, but there is no other event for removal.
-        const taskToDelete = this.tasks$.value.find(t => t.id === args.event.id);
+    public onRemove(event: RemoveEvent) {
+        const taskToDelete = this.tasks$.value.find(t => t.id === event.dataItem.id);
         if (taskToDelete) {
             const taskUpdate: PtTaskUpdate = {
                 task: taskToDelete,
@@ -114,7 +109,7 @@ export class PtItemTaskScheduleComponent implements OnInit {
                 delete: true
             };
 
-            // this.updateTask.emit(taskUpdate);
+            this.updateTask.emit(taskUpdate);
         }
     }
 

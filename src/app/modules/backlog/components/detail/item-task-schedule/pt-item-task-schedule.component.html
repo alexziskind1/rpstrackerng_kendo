@@ -1,5 +1,11 @@
-<kendo-scheduler [kendoSchedulerBinding]="events" [kendoSchedulerReactiveEditing]="createFormGroup" [selectedDate]="displayDate"
-    (save)="onSave($event)" (remove)="onRemove($event)" [editable]="true" style="height: 600px;">
+<kendo-scheduler
+    [kendoSchedulerBinding]="events"
+    [editable]="true"
+    [kendoSchedulerReactiveEditing]="createFormGroup"
+    [selectedDate]="displayDate"
+    (save)="onSave($event)"
+    (remove)="onRemove($event)"
+    style="height: 600px;">
     <kendo-scheduler-day-view [startTime]="startTime">
     </kendo-scheduler-day-view>
 

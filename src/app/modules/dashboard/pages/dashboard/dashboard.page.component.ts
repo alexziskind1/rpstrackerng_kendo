@@ -1,9 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+
+import { BehaviorSubject, Subscription, Observable } from 'rxjs';
 import { DashboardService } from '../../services/dashboard.service';
-import { DashboardFilter, FilteredIssues } from '../../repositories/dashboard.repository';
+import { FilteredIssues } from '../../repositories/dashboard.repository';
 import { Store } from 'src/app/core/state/app-store';
 import { StatusCounts } from '../../models';
-import { BehaviorSubject, Subscription, Observable } from 'rxjs';
+import { DashboardFilter } from 'src/app/shared/models/dto/stats/dashboard-filter';
+
 import { PtUserService } from 'src/app/core/services';
 import { PtUser } from 'src/app/core/models/domain';
 

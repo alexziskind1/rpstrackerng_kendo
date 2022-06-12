@@ -1,18 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { Observable } from 'rxjs';
+
 import { environment as env } from '../../../../environments/environment';
 
-import { Observable } from 'rxjs';
+
 import { StatusCounts, PriorityCounts, TypeCounts } from '../models';
+import { DashboardFilter } from 'src/app/shared/models/dto/stats/dashboard-filter';
 import { PtItem } from 'src/app/core/models/domain';
-
-
-export interface DashboardFilter {
-    userId?: number;
-    dateStart?: Date;
-    dateEnd?: Date;
-}
 
 export interface ItemsForMonth {
     closed: PtItem[];

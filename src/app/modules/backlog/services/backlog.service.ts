@@ -148,7 +148,6 @@ export class BacklogService {
         });
     }
 
-
     public updatePtTask(currentItem: PtItem, task: PtTask, toggle: boolean, newTitle?: string): Promise<PtTask> {
 
         const taskToUpdate: PtTask = {
